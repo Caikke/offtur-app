@@ -3,7 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebaseConfig: {
+  apiKey: "AIzaSyAFda8AktWfFLf_FOPUn78X60yNEr3yvAU",
+  authDomain: "offtur-app.firebaseapp.com",
+  projectId: "offtur-app",
+  storageBucket: "offtur-app.firebasestorage.app",
+  messagingSenderId: "127162026664",
+  appId: "1:127162026664:web:fde56f95b372da8a8b909d",
+  measurementId: "G-J5QD224EMQ"
+  }
 };
 
 /*

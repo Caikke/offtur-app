@@ -1,3 +1,23 @@
 {
-  "typescript.preferences.autoImportFileExcludePatterns": ["@ionic/angular/common", "@ionic/angular"]
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "@ionic/angular/common",
+    "@ionic/angular"
+  ],
+  "cSpell.words": [
+    "cnpj",
+    "Contato",
+    "Contatos",
+    "danger",
+    "firebaseapp",
+    "firebasestorage",
+    "Guichê",
+    "inject",
+    "messaging",
+    "offtur",
+    "popover",
+    "production",
+    "resetar",
+    "telefônica",
+    "Telefônicos"
+  ]
 }

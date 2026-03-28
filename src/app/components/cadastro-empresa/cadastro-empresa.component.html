@@ -1,0 +1,74 @@
+<ion-content class="ion-padding">
+  <form [formGroup]="empresaForm">
+    <div class="logo-container ion-text-center ion-margin-bottom">
+      <div class="logo-upload" (click)="fileInput.click()">
+        @if (logoPreview) {
+          <img [src]="logoPreview" alt="Logo da Empresa" />
+        } @else {
+          <ion-icon name="cloud-upload-outline"></ion-icon>
+          <p>Logo da Empresa</p>
+        }
+      </div>
+      <input #fileInput type="file" (change)="uploadLogo($event)" hidden accept="image/*">
+    </div>
+
+    <ion-list>
+      <ion-item fill="outline" class="ion-margin-bottom">
+        <ion-label position="floating">Razão Social (Nome Fantasia)</ion-label>
+        <ion-input formControlName="nome" placeholder="Ex: Viação Cometa"></ion-input>
+      </ion-item>
+
+      <ion-item fill="outline" class="ion-margin-bottom">
+        <ion-label position="floating">CNPJ</ion-label>
+        <ion-input formControlName="cnpj" placeholder="00.000.000/0000-00"></ion-input>
+      </ion-item>
+
+      <ion-item fill="outline" class="ion-margin-bottom">
+        <ion-label position="floating">E-mail</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div class="ion-padding-top">
+      <ion-text color="primary">
+        <h3>Agenda telefônica</h3>
+      </ion-text>
+      
+      <div formArrayName="telefones">
+        @for (tel of telefones.controls; track $index; let i = $index) {
+          <div [formGroupName]="i" class="phone-row">
+            <ion-grid>
+              <ion-row align-items-center>
+                <ion-col size="4">
+                  <ion-select formControlName="rotulo" interface="popover">
+                    <ion-select-option value="Financeiro">Financeiro</ion-select-option>
+                    <ion-select-option value="Promotor">Promotor</ion-select-option>
+                    <ion-select-option value="Guichê">Guichê</ion-select-option>
+                    <ion-select-option value="Outro">Outro</ion-select-option>
+                  </ion-select>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-input formControlName="numero" placeholder="(00) 00000-0000"></ion-input>
+                </ion-col>
+                <ion-col size="2">
+                  <ion-button fill="clear" color="danger" (click)="removeTelefone(i)">
+                    <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        }
+      </div>
+      
+      <ion-button fill="outline" size="small" (click)="addTelefone()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Adicionar Telefone
+      </ion-button>
+    </div>
+
+    <ion-button expand="block" class="ion-margin-top" (click)="salvar()" [disabled]="!empresaForm.valid">
+      Salvar Empresa
+    </ion-button>
+  </form>
+</ion-content>
