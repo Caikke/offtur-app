@@ -1,7 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, Input } from '@angular/core'; // 1. Corrigido: 'Input' com I maiúsculo
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import{
+import { IonicModule, ModalController } from '@ionic/angular';
+import {
   FormBuilder,
   FormGroup,
   FormArray,
@@ -9,9 +9,9 @@ import{
   ReactiveFormsModule
 } from '@angular/forms';
 
-//Firebase
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
-import {Storage, ref, uploadBytes, getDownloadURL} from '@angular/fire/storage';
+// Firebase
+import { Firestore, collection, addDoc, doc, updateDoc } from '@angular/fire/firestore';
+import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-cadastro-empresa',
@@ -24,8 +24,11 @@ import {Storage, ref, uploadBytes, getDownloadURL} from '@angular/fire/storage';
     ReactiveFormsModule
   ]
 })
-export class CadastroEmpresaComponent  implements OnInit {
-  //Injeção de dependências
+export class CadastroEmpresaComponent implements OnInit {
+  // 2. Corrigido: O decorador é @Input() (com I maiúsculo)
+  @Input() empresaEditar: any; 
+
+  private modalCtrl = inject(ModalController);
   private fb = inject(FormBuilder);
   private firestore = inject(Firestore);
   private storage = inject(Storage);
@@ -33,28 +36,47 @@ export class CadastroEmpresaComponent  implements OnInit {
   empresaForm!: FormGroup;
   logoPreview: string | null = null;
 
-  constructor() { 
+  constructor() {
     this.initForm();
-   }
-
-  ngOnInit() {
-    // Se quiser que já comece com um campo de telefone vazio:
-    this.addTelefone();
   }
 
-  // 1. Inicializa o formulário estruturado
+  ngOnInit() {
+    console.log('Dados recebidos no Modal: ', this.empresaEditar)
+    // Se existir empresaEditar, preenchemos o formulário
+    if (this.empresaEditar) {
+      // Preenche campos simples
+      this.empresaForm.patchValue(this.empresaEditar);
+
+      // Preenche o logo
+      this.logoPreview = this.empresaEditar.logoUrl;
+
+      // Preenche os telefones (Array dinâmico)
+      this.telefones.clear();
+      if (this.empresaEditar.telefones && Array.isArray(this.empresaEditar.telefones)) {
+        this.empresaEditar.telefones.forEach((tel: any) => {
+          this.telefones.push(this.fb.group({
+            rotulo: [tel.rotulo, Validators.required],
+            numero: [tel.numero, Validators.required]
+          }));
+        });
+      }
+    } else {
+      // Se for cadastro novo, começa com um campo vazio
+      this.addTelefone();
+    }
+  }
+
   initForm() {
     this.empresaForm = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
-      cnpj: ['',[Validators.required]],
+      cnpj: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      logoUrl: [''], //Aqui guardo o link final da imagem
-      telefones: this.fb.array([]), // Array dinâmico de telefones
-      status: [true]
+      logoUrl: [''],
+      telefones: this.fb.array([]),
+      status: [true] // Mantemos o status como true por padrão
     });
   }
 
-  // 2. Helpers para o FormArray (Telefones)
   get telefones() {
     return this.empresaForm.get('telefones') as FormArray;
   }
@@ -71,51 +93,50 @@ export class CadastroEmpresaComponent  implements OnInit {
     this.telefones.removeAt(index);
   }
 
-  // 3. Lógica de Upload do Logo para o Firebase Storage
   async uploadLogo(event: any) {
     const file = event.target.files[0];
     if (!file) return;
 
     try {
-      // Cria um caminho único para a imagem
       const filePath = `logos/${new Date().getTime()}_${file.name}`;
       const storageRef = ref(this.storage, filePath);
-
-      // Faz o upload
       const snapshot = await uploadBytes(storageRef, file);
-
-      // Pega a URL pública da imagem
       const url = await getDownloadURL(snapshot.ref);
 
-      this.logoPreview = url; // Mostra a foto no círculo
-      this.empresaForm.patchValue({ logoUrl: url }); // Salva a URL no formulário
+      this.logoPreview = url;
+      this.empresaForm.patchValue({ logoUrl: url });
     } catch (error) {
-      console.error('Erro ao fazer upload do logo', error)
+      console.error('Erro ao fazer upload do logo', error);
     }
   }
 
-  // 4. Salvar os dados no Firestore
   async salvar() {
     if (this.empresaForm.valid) {
       try {
         const dadosEmpresa = this.empresaForm.value;
-        const empresaRef = collection(this.firestore, 'empresas');
 
-        await addDoc(empresaRef, dadosEmpresa);
+        if (this.empresaEditar && this.empresaEditar.id) {
+          // --- MODO EDITAR ---
+          const docRef = doc(this.firestore, `empresas/${this.empresaEditar.id}`);
+          await updateDoc(docRef, dadosEmpresa);
+          console.log('Empresa atualizada com sucesso');
+        } else {
+          // --- MODO CADASTRO ---
+          const empresaRef = collection(this.firestore, 'empresas');
+          await addDoc(empresaRef, dadosEmpresa);
+          console.log('Empresa cadastrada com sucesso!');
+        }
 
-        console.log('Empresa Cadastrada com sucesso!');
-        this.resetarFormulario();
+        // Fecha o modal e avisa a lista que houve alteração
+        this.modalCtrl.dismiss(true);
       } catch (error) {
         console.error('Erro ao salvar no banco', error);
       }
     }
   }
 
-  resetarFormulario() {
-    this.empresaForm.reset({ status:true });
-    this.telefones.clear();
-    this.addTelefone();
-    this.logoPreview = null;
+  // Função para fechar sem salvar (útil para o botão cancelar do modal)
+  fechar() {
+    this.modalCtrl.dismiss();
   }
-
 }

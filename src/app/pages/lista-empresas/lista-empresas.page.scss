@@ -1,0 +1,53 @@
+.custom-card {
+  --background: #ffffff;
+  --padding-start: 8px;
+  --border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  
+  // Efeito de clique (Ripple Effect)
+  --ripple-color: var(--ion-color-primary);
+
+  .header-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+
+    h2 {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #333;
+      margin: 0;
+    }
+
+    ion-badge {
+      font-size: 0.7rem;
+      padding: 4px 8px;
+    }
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: #666;
+  }
+}
+
+ion-item-sliding {
+  background: transparent;
+  margin-bottom: 16px;
+  
+  // Arredonda a opção de desativar também
+  ion-item-options {
+    border-radius: 0 12px 12px 0;
+    margin-right: 2px;
+  }
+}
+
+.phone-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ion-color-primary) !important;
+  font-weight: 500;
+  margin-top: 6px;
+}
