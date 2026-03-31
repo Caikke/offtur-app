@@ -1,0 +1,135 @@
+// Header e Título
+ion-toolbar {
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  
+  ion-title {
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -0.5px;
+  }
+}
+
+// Estilo dos itens do formulário principal (Nome e Tipo)
+ion-item {
+  --background: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 12px;
+
+  ion-label {
+    font-weight: 700 !important;
+    color: var(--ion-color-step-700, #444);
+    font-size: 0.9rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  ion-input, ion-select {
+    background: var(--ion-color-light);
+    border-radius: 12px;
+    border: 1px solid var(--ion-color-step-150, #dcdcdc);
+    --padding-start: 16px;
+    --padding-end: 16px;
+    min-height: 48px;
+    font-weight: 500;
+    transition: 0.2s ease-in-out;
+
+    &:focus-within {
+      border-color: var(--ion-color-tertiary);
+      box-shadow: 0 0 0 2px rgba(var(--ion-color-tertiary-rgb), 0.1);
+    }
+  }
+}
+
+// Seção Dinâmica de Campos (Onde você adiciona Soma/Subtração)
+.ion-margin-top {
+  margin-top: 24px;
+
+  ion-list-header {
+    padding-left: 0;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    ion-label {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--ion-color-tertiary);
+      border-left: 4px solid var(--ion-color-tertiary);
+      padding-left: 12px;
+    }
+
+    ion-button {
+      --color: var(--ion-color-tertiary);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+  }
+
+  // Cada linha de campo adicionada
+  .campo-row {
+    background: var(--ion-color-step-50, #f8f9fa);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 4px;
+    border: 1px solid var(--ion-color-step-150, #e0e0e0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+
+    ion-item {
+      margin-bottom: 0;
+      --padding-start: 8px;
+      
+      ion-input {
+        border: none;
+        background: transparent;
+        font-size: 0.95rem;
+      }
+
+      ion-select {
+        border: none;
+        background: var(--ion-color-tertiary-light, #f0f7ff);
+        color: var(--ion-color-tertiary);
+        font-weight: 700;
+        font-size: 0.8rem;
+        height: 36px;
+        min-height: 36px;
+        margin-left: 8px;
+        border-radius: 8px;
+      }
+    }
+  }
+}
+
+// Botão Salvar (Baseado no seu save-button)
+ion-button[expand="block"] {
+  margin-top: 32px;
+  height: 54px;
+  --border-radius: 14px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  --background: var(--ion-color-tertiary); // Usei Tertiary para diferenciar do cadastro de empresa
+  box-shadow: 0 6px 15px rgba(var(--ion-color-tertiary-rgb), 0.25);
+  transition: 0.3s;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Dark Mode
+@media (prefers-color-scheme: dark) {
+  .campo-row {
+    background: #1e1e1e !important;
+    border-color: #333 !important;
+    
+    ion-select {
+      background: #2a2a2a !important;
+    }
+  }
+  
+  ion-input, ion-select {
+    background: #1a1a1a !important;
+    border-color: #444 !important;
+  }
+}

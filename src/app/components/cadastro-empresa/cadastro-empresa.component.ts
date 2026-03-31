@@ -8,8 +8,6 @@ import {
   Validators,
   ReactiveFormsModule
 } from '@angular/forms';
-
-// --- IMPORTAÇÃO DOS ÍCONES (O que estava faltando) ---
 import { addIcons } from 'ionicons';
 import { 
   arrowBackOutline, 
@@ -20,8 +18,10 @@ import {
 } from 'ionicons/icons';
 
 // Firebase
-import { Firestore, collection, addDoc, doc, updateDoc } from '@angular/fire/firestore';
+// ADICIONADO: collectionData para buscar os sistemas em tempo real
+import { Firestore, collection, addDoc, doc, updateDoc, collectionData } from '@angular/fire/firestore';
 import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-cadastro-empresa',
@@ -46,6 +46,9 @@ export class CadastroEmpresaComponent implements OnInit {
   logoPreview: string | null = null;
   isEditMode = false; // Controla o título da página
 
+  // ADICIONADO: Observable para listar os sistemas cadastrados no banco
+  sistemas$!: Observable<any[]>;
+
   constructor() {
     // Ícones registrados para que funcionem no modo Standalone
     addIcons({
@@ -60,13 +63,17 @@ export class CadastroEmpresaComponent implements OnInit {
   }
 
   ngOnInit() {
+    // ADICIONADO: Busca as regras de sistema do Firestore para alimentar o Select
+    const regrasRef = collection(this.firestore, 'regras-sistemas');
+    this.sistemas$ = collectionData(regrasRef, { idField: 'id' });
+
     console.log('Dados recebidos no Modal: ', this.empresaEditar)
     
     // Se existir empresaEditar, preenchemos o formulário
     if (this.empresaEditar) {
       this.isEditMode = true; // Ativa modo edição
       
-      // Preenche campos simples
+      // Preenche campos simples (incluindo o sistemaId se já existir)
       this.empresaForm.patchValue(this.empresaEditar);
 
       // Preenche o logo
@@ -96,7 +103,9 @@ export class CadastroEmpresaComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       logoUrl: [''],
       telefones: this.fb.array([]),
-      status: [true] // Mantemos o status como true por padrão
+      status: [true], // Mantemos o status como true por padrão
+      // ADICIONADO: Novo campo para vincular a empresa a um sistema
+      sistemaId: ['', Validators.required] 
     });
   }
 

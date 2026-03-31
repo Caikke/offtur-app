@@ -1,101 +1,180 @@
-// Container do Upload de Logo
-.logo-container {
-  display: flex;
-  justify-content: center;
-  padding: 10px 0 20px;
+// Fundo levemente cinza para destacar os cards brancos
+.gray-background {
+  --background: #f4f5f8;
+}
 
-  .logo-upload {
-    width: 140px;
-    height: 100px;
-    border: 2px dashed var(--ion-color-medium-shade);
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--ion-color-light);
-    overflow: hidden;
-    transition: 0.2s;
+// Estilo Geral dos Cards
+.main-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
 
-    &:active { transform: scale(0.98); }
-
-    ion-icon { font-size: 32px; color: var(--ion-color-medium); }
-    p { font-size: 0.75rem; color: var(--ion-color-medium); margin-top: 4px; }
-    
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      padding: 8px;
+  ion-card-header {
+    padding-bottom: 8px;
+    ion-card-subtitle {
+      color: var(--ion-color-primary);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
   }
 }
 
-// Correção de Overlap e Estilo dos Inputs
-.custom-input-item {
-  --background: transparent;
-  --border-radius: 10px;
-  margin-bottom: 18px;
+// Customização do Upload de Logo
+.logo-card {
+  .logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+
+    .logo-upload-wrapper {
+      width: 100%;
+      max-width: 400px; // Limite para não ficar gigante em tablets
+      aspect-ratio: 16 / 9; // Mantém proporção de cinema/cartão
+      background: #f8f9fd;
+      border: 2px dashed #cbd5e0;
+      border-radius: 16px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: var(--ion-color-primary);
+        background: #f0f4ff;
+      }
+
+      // Quando já tem imagem
+      .image-box {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain; // Garante que o logo não distorce
+        }
+
+        .edit-badge {
+          position: absolute;
+          right: 10px;
+          bottom: 10px;
+          background: var(--ion-color-primary);
+          color: white;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+      }
+
+      // Quando está vazio
+      .placeholder-box {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--ion-color-medium);
+
+        ion-icon {
+          font-size: 48px;
+          margin-bottom: 8px;
+        }
+
+        p {
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        span {
+          font-size: 0.7rem;
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+}
+// Inputs Modernos
+.modern-input {
+  --border-radius: 12px;
+  --background: #fdfdfd;
+  margin-bottom: 12px;
   
-  // Garante que o label flutuante tenha espaço e cor correta
-  ion-input {
-    --padding-top: 10px;
-    --padding-bottom: 10px;
+  ion-label {
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 4px !important;
+    color: #666 !important;
+  }
+
+  ion-input, ion-select {
     font-weight: 500;
+    --padding-start: 8px;
   }
 }
 
 // Seção de Telefones
-.phone-section {
-  margin-top: 24px;
+.header-with-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  h3 {
+.phone-item {
+  background: #f8f9ff;
+  border-radius: 12px;
+  padding: 4px 8px;
+  margin-bottom: 8px;
+  border: 1px solid #eef0f7;
+
+  .small-select {
+    font-size: 0.85rem;
     font-weight: 700;
-    font-size: 1.1rem;
     color: var(--ion-color-primary);
-    margin-bottom: 16px;
-    border-left: 4px solid var(--ion-color-primary);
-    padding-left: 12px;
   }
 
-  .phone-row {
-    background: var(--ion-color-step-50, #f2f2f2);
-    border-radius: 10px;
-    margin-bottom: 8px;
-    border: 1px solid var(--ion-color-step-150, #dcdcdc);
-
-    ion-select {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--ion-color-primary);
-    }
-
-    ion-input {
-      font-size: 0.9rem;
-    }
-  }
-
-  .add-btn {
-    margin-top: 10px;
-    --border-radius: 8px;
-    font-weight: 600;
+  .small-input {
+    font-size: 0.9rem;
+    font-weight: 500;
   }
 }
 
-// Botão Salvar
-.save-button {
-  margin-top: 30px;
-  height: 52px;
-  --border-radius: 12px;
+// Botão de Salvar Principal
+.main-save-btn {
+  height: 56px;
+  --border-radius: 16px;
+  --box-shadow: 0 8px 20px rgba(var(--ion-color-primary-rgb), 0.3);
   font-weight: 700;
-  font-size: 1rem;
-  box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
+  margin-top: 10px;
 }
 
-// Ajuste para o Dark Mode (Opcional, mas recomendado)
+// Dark Mode automático
 @media (prefers-color-scheme: dark) {
-  .phone-row {
-    background: #1e1e1e !important;
-    border-color: #333 !important;
+  .main-card {
+    background: #1e1e1e;
+    border-color: #2e2e2e;
+  }
+  .phone-item {
+    background: #2a2a2a;
+    border-color: #3a3a3a;
+  }
+  .modern-input {
+    --background: #262626;
+  }
+  .logo-upload {
+    background: #262626;
+    border-color: #444;
   }
 }

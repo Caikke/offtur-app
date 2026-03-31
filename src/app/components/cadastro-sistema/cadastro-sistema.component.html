@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>Nova Regra de Sistema</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="sistemaForm">
+    <ion-item lines="stacked">
+      <ion-label position="stacked">Nome (Ex: Totalbus)</ion-label>
+      <ion-input formControlName="nome" placeholder="Digite o nome"></ion-input>
+    </ion-item>
+
+    <ion-item lines="stacked">
+      <ion-label position="stacked">Tipo de Lançamento</ion-label>
+      <ion-select formControlName="tipo">
+        <ion-select-option value="calculado">Calculado</ion-select-option>
+        <ion-select-option value="manual">Manual</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div class="ion-margin-top">
+      <ion-list-header>
+        <ion-label>Campos personalizados</ion-label>
+        <ion-button (click)="addCampo()" fill="clear">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon> Adicionar
+        </ion-button>
+      </ion-list-header>
+
+      <div formArrayName="campos">
+        @for (campo of campos.controls; track $index) {
+          <div [formGroupName]="$index" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 8px;">
+            <ion-item lines="none">
+              <ion-input formControlName="nome" placeholder="Nome (Ex: Cartão)"></ion-input>
+
+              <ion-select formControlName="operacao" interface="popover" slot="end">
+                <ion-select-option value="soma">Somar (+)</ion-select-option>
+                <ion-select-option value="subtracao">Subtrair (-)</ion-select-option>
+              </ion-select>
+
+              <ion-button slot="end" fill="clear" color="danger" (click)="removeCampo($index)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </div>
+        }
+      </div>
+    </div> <ion-button expand="block" class="ion-margin-top" (click)="salvar()" [disabled]="sistemaForm.invalid">
+      Salvar
+    </ion-button>
+  </form>
+</ion-content>

@@ -5,6 +5,8 @@ import { IonicModule, ModalController, AlertController } from '@ionic/angular';
 import { Firestore, collection, collectionData, query, orderBy, doc, updateDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { CadastroEmpresaComponent } from 'src/app/components/cadastro-empresa/cadastro-empresa.component';
+// IMPORTADO: Novo componente de visualização
+import { VisualizarEmpresaComponent } from 'src/app/components/visualizar-empresa/visualizar-empresa.component';
 
 @Component({
   selector: 'app-lista-empresas',
@@ -39,24 +41,38 @@ export class ListaEmpresasPage implements OnInit {
     this.empresas$ = collectionData(q, {idField: 'id'});
   }
 
-  // Função para abrir o cadastro (Novo/Vazio)
-  async abrirCadastro() {
-      const modal = await this.modalCtrl.create({
-        component: CadastroEmpresaComponent
+  // ATUALIZADA: Agora centralizamos a abertura do modal de cadastro/edição
+  async abrirCadastro(empresa?: any) {
+    const modal = await this.modalCtrl.create({
+      component: CadastroEmpresaComponent,
+      componentProps: {
+        // Se houver empresa, passa para o modo edição, senão fica vazio
+        empresaEditar: empresa || null
+      }
     });
     return await modal.present();
   }
 
-  // NOVA: Função para abrir o cadastro preenchido para edição
-  async editarEmpresa(empresa: any) {
+  // NOVA: Função que abre a Visualização antes de permitir editar
+  async visualizarEmpresa(empresa: any) {
     const modal = await this.modalCtrl.create({
-      component: CadastroEmpresaComponent,
-      componentProps: {
-        // Passa a empresa clicada para o @Input do componente de cadastro
-        empresaEditar: empresa 
-      }
+      component: VisualizarEmpresaComponent,
+      componentProps: { empresa },
+      // Configuração de Sheet Modal (estilo gaveta que sobe)
+      breakpoints: [0, 0.5, 0.85],
+      initialBreakpoint: 0.85,
+      handle: true
     });
-    return await modal.present();
+
+    await modal.present();
+
+    // Escuta o fechamento do modal de visualização
+    const { data } = await modal.onWillDismiss();
+
+    // Se o usuário clicou no botão "Editar" dentro da visualização, abre o formulário
+    if (data?.edit) {
+      this.abrirCadastro(empresa);
+    }
   }
 
   // Função para desativar a empresa (Soft Delete)

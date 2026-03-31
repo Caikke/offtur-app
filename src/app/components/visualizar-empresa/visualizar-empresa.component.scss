@@ -1,0 +1,77 @@
+.view-header {
+  text-align: center;
+  padding: 20px 0;
+
+  .logo-box {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 15px;
+    background: #f8f9ff;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  h1 {
+    font-weight: 800;
+    font-size: 1.5rem;
+    margin: 0 0 8px;
+    color: #1a1a1a;
+  }
+}
+
+.info-list {
+  background: transparent;
+  margin-top: 10px;
+
+  .info-item {
+    --background: #f9f9fc;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    
+    p { font-weight: 600; font-size: 0.75rem; }
+    h3 { font-weight: 700; color: #333; margin-top: 2px; }
+  }
+}
+
+.divider {
+  height: 1px;
+  background: #eee;
+  margin: 20px 0;
+}
+
+.contact-item {
+  --padding-start: 0;
+  margin-bottom: 5px;
+
+  .contact-icon {
+    background: var(--ion-color-primary-light, #eef2ff);
+    color: var(--ion-color-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    ion-icon { font-size: 20px; }
+  }
+
+  h3 { font-weight: 700; font-size: 1rem; }
+}
+
+.action-footer {
+  margin-top: 30px;
+  padding-bottom: 20px;
+
+  .edit-btn {
+    --border-radius: 14px;
+    height: 52px;
+    font-weight: 700;
+  }
+}
