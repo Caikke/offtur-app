@@ -9,6 +9,16 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 
+// --- IMPORTAÇÃO DOS ÍCONES (O que estava faltando) ---
+import { addIcons } from 'ionicons';
+import { 
+  arrowBackOutline, 
+  cloudUploadOutline, 
+  trashOutline, 
+  addOutline, 
+  chevronDownOutline 
+} from 'ionicons/icons';
+
 // Firebase
 import { Firestore, collection, addDoc, doc, updateDoc } from '@angular/fire/firestore';
 import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
@@ -25,7 +35,6 @@ import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage
   ]
 })
 export class CadastroEmpresaComponent implements OnInit {
-  // 2. Corrigido: O decorador é @Input() (com I maiúsculo)
   @Input() empresaEditar: any; 
 
   private modalCtrl = inject(ModalController);
@@ -35,15 +44,28 @@ export class CadastroEmpresaComponent implements OnInit {
 
   empresaForm!: FormGroup;
   logoPreview: string | null = null;
+  isEditMode = false; // Controla o título da página
 
   constructor() {
+    // Ícones registrados para que funcionem no modo Standalone
+    addIcons({
+      'arrow-back-outline': arrowBackOutline,
+      'cloud-upload-outline': cloudUploadOutline,
+      'trash-outline': trashOutline,
+      'add-outline': addOutline,
+      'chevron-down-outline': chevronDownOutline
+    });
+    
     this.initForm();
   }
 
   ngOnInit() {
     console.log('Dados recebidos no Modal: ', this.empresaEditar)
+    
     // Se existir empresaEditar, preenchemos o formulário
     if (this.empresaEditar) {
+      this.isEditMode = true; // Ativa modo edição
+      
       // Preenche campos simples
       this.empresaForm.patchValue(this.empresaEditar);
 
@@ -62,6 +84,7 @@ export class CadastroEmpresaComponent implements OnInit {
       }
     } else {
       // Se for cadastro novo, começa com um campo vazio
+      this.isEditMode = false;
       this.addTelefone();
     }
   }
@@ -115,7 +138,7 @@ export class CadastroEmpresaComponent implements OnInit {
       try {
         const dadosEmpresa = this.empresaForm.value;
 
-        if (this.empresaEditar && this.empresaEditar.id) {
+        if (this.isEditMode && this.empresaEditar?.id) {
           // --- MODO EDITAR ---
           const docRef = doc(this.firestore, `empresas/${this.empresaEditar.id}`);
           await updateDoc(docRef, dadosEmpresa);

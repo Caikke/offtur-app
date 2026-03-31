@@ -1,5 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="fechar()">
+        <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+        Voltar
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>
+      {{ isEditMode ? 'Editar Empresa' : 'Cadastrar Empresa' }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content class="ion-padding">
   <form [formGroup]="empresaForm">
+    
     <div class="logo-container ion-text-center ion-margin-bottom">
       <div class="logo-upload" (click)="fileInput.click()">
         @if (logoPreview) {
@@ -12,35 +28,46 @@
       <input #fileInput type="file" (change)="uploadLogo($event)" hidden accept="image/*">
     </div>
 
-    <ion-list>
-      <ion-item fill="outline" class="ion-margin-bottom">
-        <ion-label position="floating">Razão Social (Nome Fantasia)</ion-label>
-        <ion-input formControlName="nome"></ion-input>
+    <ion-list lines="none">
+      <ion-item fill="outline" class="custom-input-item">
+        <ion-input 
+          label="Razão Social (Nome Fantasia)" 
+          label-placement="floating" 
+          formControlName="nome"
+          placeholder="Ex: Auto Viação Cambuí">
+        </ion-input>
       </ion-item>
 
-      <ion-item fill="outline" class="ion-margin-bottom">
-        <ion-label position="floating">CNPJ</ion-label>
-        <ion-input formControlName="cnpj" placeholder="00.000.000/0000-00"></ion-input>
+      <ion-item fill="outline" class="custom-input-item">
+        <ion-input 
+          label="CNPJ" 
+          label-placement="floating" 
+          formControlName="cnpj" 
+          placeholder="00.000.000/0000-00">
+        </ion-input>
       </ion-item>
 
-      <ion-item fill="outline" class="ion-margin-bottom">
-        <ion-label position="floating">E-mail</ion-label>
-        <ion-input type="email" formControlName="email"></ion-input>
+      <ion-item fill="outline" class="custom-input-item">
+        <ion-input 
+          type="email" 
+          label="E-mail" 
+          label-placement="floating" 
+          formControlName="email"
+          placeholder="contato@empresa.com.br">
+        </ion-input>
       </ion-item>
     </ion-list>
 
-    <div class="ion-padding-top">
-      <ion-text color="primary">
-        <h3>Agenda telefônica</h3>
-      </ion-text>
+    <div class="phone-section">
+      <h3>Agenda telefônica</h3>
       
       <div formArrayName="telefones">
         @for (tel of telefones.controls; track $index; let i = $index) {
           <div [formGroupName]="i" class="phone-row">
             <ion-grid>
-              <ion-row align-items-center>
+              <ion-row class="ion-align-items-center">
                 <ion-col size="4">
-                  <ion-select formControlName="rotulo" interface="popover">
+                  <ion-select formControlName="rotulo" interface="popover" toggleIcon="chevron-down-outline">
                     <ion-select-option value="Financeiro">Financeiro</ion-select-option>
                     <ion-select-option value="Promotor">Promotor</ion-select-option>
                     <ion-select-option value="Guichê">Guichê</ion-select-option>
@@ -50,7 +77,7 @@
                 <ion-col size="6">
                   <ion-input formControlName="numero" placeholder="(00) 00000-0000"></ion-input>
                 </ion-col>
-                <ion-col size="2">
+                <ion-col size="2" class="ion-text-right">
                   <ion-button fill="clear" color="danger" (click)="removeTelefone(i)">
                     <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
                   </ion-button>
@@ -61,14 +88,14 @@
         }
       </div>
       
-      <ion-button fill="outline" size="small" (click)="addTelefone()">
+      <ion-button fill="outline" size="small" (click)="addTelefone()" class="add-btn">
         <ion-icon name="add-outline" slot="start"></ion-icon>
         Adicionar Telefone
       </ion-button>
     </div>
 
-    <ion-button expand="block" class="ion-margin-top" (click)="salvar()" [disabled]="!empresaForm.valid">
-      Salvar Empresa
+    <ion-button expand="block" class="save-button" (click)="salvar()" [disabled]="!empresaForm.valid">
+      {{ isEditMode ? 'Salvar Alterações' : 'Cadastrar Empresa' }}
     </ion-button>
   </form>
 </ion-content>

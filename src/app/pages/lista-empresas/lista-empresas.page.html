@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>Empresas Parceiras</ion-title>
+    <ion-title>Empresas</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="abrirCadastro()">
         <ion-icon name="add-outline" slot="icon-only"></ion-icon>
@@ -10,7 +10,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
   <ion-list lines="none">
     @for (empresa of empresas$ | async; track empresa.id) {
       
@@ -18,7 +17,7 @@
         
         <ion-item class="custom-card" (click)="editarEmpresa(empresa)" button="true" detail="false">
           <ion-thumbnail slot="start">
-            <img [src]="empresa.logoUrl || 'assets/icon/favicon.png'" />
+            <img [src]="empresa.logoUrl || 'assets/icon/favicon.png'" [alt]="empresa.nome" />
           </ion-thumbnail>
           
           <ion-label>
@@ -26,6 +25,7 @@
               <h2>{{ empresa.nome }}</h2>
               <ion-badge color="success" mode="ios">Ativa</ion-badge>
             </div>
+            
             <p>CNPJ: {{ empresa.cnpj }}</p>
             
             @if (empresa.telefones && empresa.telefones.length > 0) {
@@ -36,7 +36,7 @@
             }
           </ion-label>
 
-          <ion-icon name="create-outline" slot="end" color="medium" style="font-size: 18px;"></ion-icon>
+          <ion-icon name="chevron-forward-outline" slot="end" color="medium" style="font-size: 16px;"></ion-icon>
         </ion-item>
 
         <ion-item-options side="end">
@@ -49,11 +49,10 @@
       </ion-item-sliding>
 
     } @empty {
-      <div class="ion-text-center ion-padding">
+      <div class="ion-text-center ion-padding" style="margin-top: 50px;">
         <ion-icon name="bus-outline" style="font-size: 64px; color: #ccc;"></ion-icon>
-        <p>Nenhuma empresa cadastrada ainda.</p>
+        <p style="color: #999;">Nenhuma empresa cadastrada ainda.</p>
       </div>
     }
   </ion-list>
-
 </ion-content>
