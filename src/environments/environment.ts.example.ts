@@ -5,14 +5,14 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-  apiKey: "AIzaSyAFda8AktWfFLf_FOPUn78X60yNEr3yvAU",
-  authDomain: "offtur-app.firebaseapp.com",
-  projectId: "offtur-app",
-  storageBucket: "offtur-app.firebasestorage.app",
-  messagingSenderId: "127162026664",
-  appId: "1:127162026664:web:fde56f95b372da8a8b909d",
-  measurementId: "G-J5QD224EMQ"
-  }
+    apiKey: "SUA_CHAVE_AQUI",
+    authDomain: "SEU_DOMINIO",
+    projectId: "SEU_ID_PROJETO",
+    storageBucket: "SEU_BUCKET",
+    messagingSenderId: "SEU_SENDER_ID",
+    appId: "SEU_APP_ID"
+  },
+  apiUrl: "http://localhost:3000"
 };
 
 /*
